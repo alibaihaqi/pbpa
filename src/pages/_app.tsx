@@ -1,6 +1,7 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
+import { RecoilRoot } from 'recoil'
 import { ApolloProvider } from '@apollo/client'
 import { apolloClient } from '@/utils/graphql'
 
@@ -13,9 +14,11 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
 
-      <ApolloProvider client={apolloClient}>
-        <Component {...pageProps} />
-      </ApolloProvider>
+      <RecoilRoot>
+        <ApolloProvider client={apolloClient}>
+          <Component {...pageProps} />
+        </ApolloProvider>
+      </RecoilRoot>
     </>
   )
 }
