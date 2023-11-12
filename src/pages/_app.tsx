@@ -3,7 +3,8 @@ import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { RecoilRoot } from 'recoil'
 import { ApolloProvider } from '@apollo/client'
-import { apolloClient } from '@/utils/graphql'
+import { Analytics } from '@vercel/analytics/react'
+import { apolloClient } from '@/services'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -17,6 +18,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <RecoilRoot>
         <ApolloProvider client={apolloClient}>
           <Component {...pageProps} />
+          <Analytics mode={"production"} />
         </ApolloProvider>
       </RecoilRoot>
     </>
