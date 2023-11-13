@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 
 interface IErrorProps {
   className?: string
-  errorData: ApolloError
+  errorData: ApolloError | undefined
 }
 
 const Error: FC<IErrorProps> = ({
@@ -15,7 +15,7 @@ const Error: FC<IErrorProps> = ({
     <div className={className}>
       <p>Error!</p>
       <p className="pt-8">
-        { errorData.message }
+        { errorData?.message }
       </p>
     </div>
   )

@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import Link from 'next/link'
 import styled from '@emotion/styled'
 import { format } from 'date-fns'
 import { IContact } from '@/interfaces/contact'
@@ -19,9 +20,18 @@ const ContactCard: FC<IContactCardProps> = ({
       key={key}
       className={className}
     >
-      <p className="contact-text_color fs-16">
-        Name: { contact.first_name } { contact.last_name }
-      </p>
+      <div className="contact-info">
+        <p className="contact-text_color fs-16">
+          Name: { contact.first_name } { contact.last_name }
+        </p>
+
+        <Link
+          className="contact-edit contact-text_color fs-16"
+          href={`/form?isEdit=true&contactId=${contact.id}`}
+        >
+          Edit
+        </Link>
+      </div>
       <p className="contact-text_color fs-12 pt-8">
         Created at: { format(new Date(contact.created_at), 'dd-MMM-yyyy') }
       </p>
@@ -57,6 +67,21 @@ export default styled(ContactCard)`
   padding: 16px;
   cursor: pointer;
   user-select: none;
+
+  .contact-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .contact-edit {
+    background-color: #E9E3E6;
+    border: 1px solid #191308;
+    border-radius: 4px;
+    color: white;
+    padding: 2px 16px;
+    text-decoration: none;
+  }
   
   .contact-text_color {
     color: #191308;
