@@ -24,4 +24,4 @@ export const GET_CONTACT_LIST = gql`
     }
   }
 }
-`;
+`
