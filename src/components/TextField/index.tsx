@@ -7,7 +7,7 @@ interface ITextFieldProps {
   className?: string
   form: IContactForm
   onChangeInput?: (event: ChangeEvent<HTMLInputElement>) => void
-  onPhoneChangeInput?: (event: ChangeEvent<HTMLInputElement>, index: number, value: string) => void
+  onPhoneChangeInput?: (event: ChangeEvent<HTMLInputElement>, index: number) => void
   phones?: IPhoneNumber[]
   value?: string
 }
@@ -16,19 +16,24 @@ const TextField: FC<ITextFieldProps> = ({
   className,
   form,
   onChangeInput,
+  onPhoneChangeInput,
   phones,
   value,
 }) => {
   const renderTextField = () => {
-    if (form.type === 'phone') {
-      phones?.map((phone, idx) => {
+    if (form.type === 'phones') {
+      return phones?.map((phone, idx) => {
         return (
           <input
             key={idx}
             className="input fs-16"
             type={form.keyboardType}
             value={phone.number}
-            onChange={onChangeInput}
+            onChange={(e) => {
+              console.log('here')
+              console.log(e.target.value)
+              onPhoneChangeInput && onPhoneChangeInput(e, idx)
+            }}
           />
         )
       })

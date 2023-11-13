@@ -28,9 +28,9 @@ export default function ContactForm() {
     })
   }
 
-  const handlePhoneInput = (event: ChangeEvent<HTMLInputElement>, index: number, value: string) => {
+  const handlePhoneInput = (event: ChangeEvent<HTMLInputElement>, index: number) => {
     const phones = contactForm.phones
-    phones[index].number = value
+    phones[index].number = event.target.value
     setContactForm({
       ...contactForm,
       phones: [...phones]
@@ -67,12 +67,12 @@ export default function ContactForm() {
       <h2>Contact Form</h2>
 
       { CONTACT_FORMS.map((form) => {
-        if (form.type === 'phone') {
+        if (form.type === 'phones') {
           return (
             <TextField
               key={form.form_id}
               form={form}
-              phones={contactForm[form.form_id]}
+              phones={contactForm[form.type]}
               onPhoneChangeInput={handlePhoneInput}
             />
           )

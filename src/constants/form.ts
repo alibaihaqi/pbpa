@@ -29,7 +29,7 @@ export const CONTACT_FORMS: IContactForm[] = [
     form_id: 'phone',
     title: 'Phone Number',
     keyboardType: 'tel',
-    type: 'phone',
+    type: 'phones',
     listPhone: [
       {
         number: '',
