@@ -16,8 +16,9 @@ const SearchInput: FC<ISearchInputProps> = ({
     <section className={className}>
       <input
         className="input fs-16"
-        value={input}
         onChange={onChangeInput}
+        placeholder="search input..."
+        value={input}
       />
     </section>
   )
