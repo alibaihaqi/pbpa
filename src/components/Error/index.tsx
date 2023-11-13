@@ -24,10 +24,13 @@ const Error: FC<IErrorProps> = ({
 export default styled(Error)`
   display: flex;
   flex: 1;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 16px;
 
   .pt-8 {
     padding-top: 8px;
+    text-align: center;
   }
 `
