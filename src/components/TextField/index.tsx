@@ -1,29 +1,32 @@
 import { ChangeEvent, FC } from 'react'
 import styled from '@emotion/styled'
 
-interface ISearchInputProps {
+interface ITextFieldProps {
   className?: string
   input: string,
   onChangeInput: (event: ChangeEvent<HTMLInputElement>) => void
+  title: string
 }
 
-const SearchInput: FC<ISearchInputProps> = ({
+const TextField: FC<ITextFieldProps> = ({
   className,
   input,
   onChangeInput,
+  title,
 }) => {
   return (
-    <section className={className}>
+    <div className={className}>
+      <p>{ title }</p>
       <input
         className="input fs-16"
         value={input}
         onChange={onChangeInput}
       />
-    </section>
+    </div>
   )
 }
 
-export default styled(SearchInput)`
+export default styled(TextField)`
   background: white;
   display: flex;
   padding: 8px; 

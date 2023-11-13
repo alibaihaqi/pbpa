@@ -1,6 +1,6 @@
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
-import ContactList from '@/components/ContactList'
+import ContactList from '@/features/ContactList'
 
 const inter = Inter({ subsets: ['latin'] })
 

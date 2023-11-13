@@ -9,19 +9,12 @@ import Error  from '@/components/Error'
 import Loading  from '@/components/Loading'
 import Pagination  from '@/components/Pagination'
 import SearchInput from '@/components/SearchInput'
+import Section  from '@/components/Section'
 
 import { IContact } from '@/interfaces/contact'
 import { GET_CONTACT_LIST } from '@/services/contact/getContactList'
 import { isHideLoadMoreButtonState } from '@/store/contact'
 import { useStateWithCallback } from '@/hooks/useStateWithCallback'
-
-const Section = styled.section`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  gap: 0.5rem;
-  padding: 0.75rem;
-`
 
 const AddButtonWrapper = styled.section`
   display: flex;
@@ -29,7 +22,7 @@ const AddButtonWrapper = styled.section`
   padding: 16px 16px 0 16px;
 `
 
-export default function CardList() {
+export default function ContactList() {
   const [searchInput, setSearchInput ] = useStateWithCallback('')
   const router = useRouter()
 
