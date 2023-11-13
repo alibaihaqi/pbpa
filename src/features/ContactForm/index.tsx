@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react'
 import { useRouter } from 'next/router'
-import { useMutation } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import styled from '@emotion/styled'
 
 import Button from '@/components/Button'
@@ -10,13 +10,15 @@ import TextField  from '@/components/TextField'
 import { CONTACT_FORMS } from '@/constants/form'
 import { useStateWithCallback } from '@/hooks/useStateWithCallback'
 import { ADD_CONTACT } from '@/services/contact/addContact'
+import { GET_CONTACT_DETAIL } from '@/services/contact/getContactDetail'
+import { EDIT_CONTACT } from '@/services/contact/editContact'
 
 interface IAddButtonProps {
   addNewPhoneNumberButton?: () => void
   className?: string
 }
 
-const addButton = ({
+const addContactButton = ({
   className,
   addNewPhoneNumberButton,
 }: IAddButtonProps) => {
@@ -32,7 +34,7 @@ const addButton = ({
   )
 }
 
-const AddButton = styled(addButton)`
+const AddContactButton = styled(addContactButton)`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,8 +62,19 @@ export default function ContactForm() {
       { number: '' },
     ]
   })
-  const router = useRouter()
   const [addContact, { error }] = useMutation(ADD_CONTACT)
+  const [editContact, { error: errorUpdate }] = useMutation(EDIT_CONTACT)
+  const router = useRouter()
+
+  useQuery(GET_CONTACT_DETAIL, {
+    variables: {
+      id: Number(router.query?.contactId)
+    },
+    skip: !JSON.parse(router.query?.isEdit as string || 'false'),
+    onCompleted: (data) => {
+      setContactForm(data.contact_by_pk)
+    } 
+  })
 
   const addNewPhoneNumberButton = () => {
     setContactForm({
@@ -87,9 +100,21 @@ export default function ContactForm() {
   }
 
   const submitContact = async () => {
-    await addContact({
-      variables: contactForm,
-    })
+    if (router.query?.isEdit === 'true') {
+      await editContact({
+        variables: {
+          id: Number(router.query?.contactId),
+          _set: {
+            first_name: contactForm.first_name,
+            last_name: contactForm.last_name,
+          },
+        }
+      })
+    } else {
+      await addContact({
+        variables: contactForm,
+      })
+    }
 
     setContactForm({
       first_name: '',
@@ -102,7 +127,7 @@ export default function ContactForm() {
     await router.back()
   }
 
-  if (error) <Error errorData={error} />
+  if (error || errorUpdate) <Error errorData={error || errorUpdate} />
   
   return (
     <Section>
@@ -130,7 +155,7 @@ export default function ContactForm() {
         )
       })}
 
-      <AddButton addNewPhoneNumberButton={addNewPhoneNumberButton} />
+      <AddContactButton addNewPhoneNumberButton={addNewPhoneNumberButton} />
 
       <Button
         title='Submit'

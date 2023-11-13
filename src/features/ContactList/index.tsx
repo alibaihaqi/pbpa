@@ -15,6 +15,7 @@ import { IContact } from '@/interfaces/contact'
 import { GET_CONTACT_LIST } from '@/services/contact/getContactList'
 import { isHideLoadMoreButtonState } from '@/store/contact'
 import { useStateWithCallback } from '@/hooks/useStateWithCallback'
+import { ChangeEvent } from 'react'
 
 const AddButtonWrapper = styled.section`
   display: flex;
@@ -35,6 +36,41 @@ export default function ContactList() {
     },
   })
 
+  const onLoadMoreHandler = async () => {
+    const { data: newData } = await fetchMore({
+      variables: {
+        offset: data.contact.length,
+        limit: Number(process.env.NEXT_PUBLIC_GRAPHQL_LIMIT_PAGINATION),
+      },
+    })
+
+    if (newData.contact?.length < Number(process.env.NEXT_PUBLIC_GRAPHQL_LIMIT_PAGINATION)) {
+      setIsHideLoadMoreButton(true)
+    }
+  }
+
+  const searchInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event?.target?.value !== searchInput) {
+      setSearchInput(event?.target?.value, async (prevVal: string, currVal: string) => {
+        if (currVal.length > 2 || currVal.length === 0) {
+          const { data: newData } = await refetch({
+            offset: 0,
+            limit: Number(process.env.NEXT_PUBLIC_GRAPHQL_LIMIT_PAGINATION),
+            where: {
+              first_name: {
+                _like: `%${currVal}%`
+              }
+            }
+          })
+
+          if (newData.contact?.length < Number(process.env.NEXT_PUBLIC_GRAPHQL_LIMIT_PAGINATION)) {
+            setIsHideLoadMoreButton(true)
+          }
+        }
+      })
+    }
+  }
+
   if (loading) return <Loading />
   if (error) return <Error errorData={error} />
 
@@ -42,27 +78,7 @@ export default function ContactList() {
     <>
       <SearchInput
         input={searchInput}
-        onChangeInput={(event) => {
-          if (event?.target?.value !== searchInput) {
-            setSearchInput(event?.target?.value, async (prevVal: string, currVal: string) => {
-              if (currVal.length > 2 || currVal.length === 0) {
-                const { data: newData } = await refetch({
-                  offset: 0,
-                  limit: Number(process.env.NEXT_PUBLIC_GRAPHQL_LIMIT_PAGINATION),
-                  where: {
-                    first_name: {
-                      _like: `%${currVal}%`
-                    }
-                  }
-                })
-    
-                if (newData.contact?.length < Number(process.env.NEXT_PUBLIC_GRAPHQL_LIMIT_PAGINATION)) {
-                  setIsHideLoadMoreButton(true)
-                }
-              }
-            })
-          }
-        }}
+        onChangeInput={searchInputHandler}
       />
 
       <AddButtonWrapper>
@@ -86,18 +102,7 @@ export default function ContactList() {
         
         <Pagination
           isHideButton={isHideLoadMoreButton}
-          onLoadMoreClick={async () => {
-            const { data: newData } = await fetchMore({
-              variables: {
-                offset: data.contact.length,
-                limit: Number(process.env.NEXT_PUBLIC_GRAPHQL_LIMIT_PAGINATION),
-              },
-            })
-
-            if (newData.contact?.length < Number(process.env.NEXT_PUBLIC_GRAPHQL_LIMIT_PAGINATION)) {
-              setIsHideLoadMoreButton(true)
-            }
-          }}
+          onLoadMoreClick={onLoadMoreHandler}
         />
       </Section>
     </>
