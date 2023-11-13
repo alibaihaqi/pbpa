@@ -8,20 +8,20 @@ export const GET_CONTACT_LIST = gql`
     $order_by: [contact_order_by!], 
     $where: contact_bool_exp
   ) {
-    contact(
+    contact (
       distinct_on: $distinct_on, 
       limit: $limit, 
       offset: $offset, 
       order_by: $order_by, 
       where: $where
-  ){
-    created_at
-    first_name
-    id
-    last_name
-    phones {
-      number
+    ) {
+      created_at
+      first_name
+      id
+      last_name
+      phones {
+        number
+      }
     }
   }
-}
 `
