@@ -2,6 +2,7 @@ import { ChangeEvent, FC } from 'react'
 import styled from '@emotion/styled'
 import { IContactForm } from '@/constants/form'
 import { IPhoneNumber } from '@/interfaces/contact'
+import Button from '@/components/Button'
 
 interface ITextFieldProps {
   className?: string
@@ -27,6 +28,7 @@ const TextField: FC<ITextFieldProps> = ({
           <input
             key={idx}
             className="input fs-16"
+            placeholder={form.placeholder}
             type={form.keyboardType}
             value={phone.number}
             onChange={(e) => {
@@ -41,6 +43,7 @@ const TextField: FC<ITextFieldProps> = ({
       <input
         className="input fs-16"
         name={form.form_id}
+        placeholder={form.placeholder}
         type={form.keyboardType}
         value={value as string}
         onChange={onChangeInput}
@@ -75,8 +78,13 @@ export default styled(TextField)`
     background: white;
     border: 1px solid #454B66;
     color: #191308;
+    margin-bottom: 12px;
     padding: 10px;
     width: 100%;
+  }
+
+  .input:last-child {
+    margin-bottom: 0
   }
 
   .input:focus {

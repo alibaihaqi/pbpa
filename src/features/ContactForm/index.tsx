@@ -1,6 +1,7 @@
 import { ChangeEvent } from 'react'
 import { useRouter } from 'next/router'
 import { useMutation } from '@apollo/client'
+import styled from '@emotion/styled'
 
 import Button from '@/components/Button'
 import Error from '@/components/Error'
@@ -9,6 +10,47 @@ import TextField  from '@/components/TextField'
 import { CONTACT_FORMS } from '@/constants/form'
 import { useStateWithCallback } from '@/hooks/useStateWithCallback'
 import { ADD_CONTACT } from '@/services/contact/addContact'
+
+interface IAddButtonProps {
+  addNewPhoneNumberButton?: () => void
+  className?: string
+}
+
+const addButton = ({
+  className,
+  addNewPhoneNumberButton,
+}: IAddButtonProps) => {
+  return (
+    <div className={className}>
+      <button
+        className='phone-button'
+        onClick={addNewPhoneNumberButton}
+      >
+        + Add Phone
+      </button>
+    </div>
+  )
+}
+
+const AddButton = styled(addButton)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 8px;
+
+.phone-button {
+  background-color: #BFC0C0;
+  background-repeat: no-repeat;
+  border: 1px solid white;
+  border-radius: 4px;
+  color: #2D3142;
+  cursor: pointer;
+  font-size: 14px;
+  overflow: hidden;
+  outline: none;
+  padding: 4px 8px;
+}
+`
 
 export default function ContactForm() {
   const [contactForm, setContactForm] = useStateWithCallback({
@@ -19,7 +61,7 @@ export default function ContactForm() {
     ]
   })
   const router = useRouter()
-  const [addContact, { data, loading, error }] = useMutation(ADD_CONTACT)
+  const [addContact, { error }] = useMutation(ADD_CONTACT)
 
   const addNewPhoneNumberButton = () => {
     setContactForm({
@@ -87,6 +129,8 @@ export default function ContactForm() {
           />
         )
       })}
+
+      <AddButton addNewPhoneNumberButton={addNewPhoneNumberButton} />
 
       <Button
         title='Submit'
