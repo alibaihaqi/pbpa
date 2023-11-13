@@ -30,8 +30,6 @@ const TextField: FC<ITextFieldProps> = ({
             type={form.keyboardType}
             value={phone.number}
             onChange={(e) => {
-              console.log('here')
-              console.log(e.target.value)
               onPhoneChangeInput && onPhoneChangeInput(e, idx)
             }}
           />
