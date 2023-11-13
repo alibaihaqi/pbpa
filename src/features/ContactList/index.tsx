@@ -43,7 +43,6 @@ export default function ContactList() {
       <SearchInput
         input={searchInput}
         onChangeInput={(event) => {
-          const searchValue = event?.target?.value
           if (event?.target?.value !== searchInput) {
             setSearchInput(event?.target?.value, async (prevVal: string, currVal: string) => {
               if (currVal.length > 2 || currVal.length === 0) {
